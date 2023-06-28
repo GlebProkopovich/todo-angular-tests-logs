@@ -4,6 +4,7 @@
   <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="form">
     <label>
       <input
+        id="email"
         type="text"
         formControlName="email"
         required
@@ -14,32 +15,44 @@
       />
     </label>
 
-    <div *ngIf="email!.invalid && (email!.dirty || email!.touched)" class="error">
+    <div
+      *ngIf="email!.invalid && (email!.dirty || email!.touched)"
+      class="error email-error"
+    >
       <div *ngIf="email!.errors?.['required']">Email is required</div>
       <div *ngIf="email!.errors?.['pattern']">Email incorrect pattern</div>
     </div>
 
     <label>
       <input
+        id="password"
         type="password"
         formControlName="password"
         required
         [ngClass]="{
-          inputError: password!.invalid && (password!.dirty || password!.touched),
+          inputError:
+            password!.invalid && (password!.dirty || password!.touched),
           inputSuccess: password!.valid
         }"
       />
     </label>
 
-    <div *ngIf="password!.invalid && (password!.dirty || password!.touched)" class="error">
+    <div
+      *ngIf="password!.invalid && (password!.dirty || password!.touched)"
+      class="error password-error"
+    >
       <div *ngIf="password!.errors?.['required']">Email is required</div>
-      <div *ngIf="password!.errors?.['minLength']">Name must be at least 3 characters long</div>
+      <div *ngIf="password!.errors?.['minLength']">
+        Name must be at least 3 characters long
+      </div>
     </div>
 
     <label>
       <input type="checkbox" formControlName="rememberMe" />
       remember me
     </label>
-    <button type="submit" [disabled]="loginForm.invalid">Sign in</button>
+    <button class="signIn-btn" type="submit" [disabled]="loginForm.invalid">
+      Sign in
+    </button>
   </form>
 </div>
