@@ -6,12 +6,17 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { LoggerService } from 'src/app/shared/services/logger.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private loggerService: LoggerService
+  ) {}
   async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -20,6 +25,10 @@ export class AuthGuard implements CanActivate {
     const isAuth = this.authService.isAuth;
     if (!isAuth) {
       this.router.navigate(['/login']);
+      this.loggerService.error(
+        'User is not authorized, route to "/login"',
+        'AuthGuard'
+      );
     }
     return isAuth;
   }

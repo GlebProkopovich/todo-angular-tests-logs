@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Observable } from 'rxjs';
 import { Notify } from 'src/app/core/models/notify.models';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   selector: 'tl-notify',
@@ -11,7 +12,10 @@ import { Notify } from 'src/app/core/models/notify.models';
 export class NotifyComponent implements OnInit {
   notify$?: Observable<Notify | null>;
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private loggerService: LoggerService
+  ) {}
 
   ngOnInit(): void {
     this.notify$ = this.notificationService.notify$;
@@ -19,5 +23,6 @@ export class NotifyComponent implements OnInit {
 
   closeNotification() {
     this.notificationService.clear();
+    this.loggerService.info('Notification closed', 'NotifyComponent');
   }
 }

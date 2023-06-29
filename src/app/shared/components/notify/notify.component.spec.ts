@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NotifyComponent } from './notify.component';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { of } from 'rxjs';
+import { LoggerService } from '../../services/logger.service';
 
 describe('NotifyComponent', () => {
   let notifyComponent: NotifyComponent;
@@ -11,7 +12,7 @@ describe('NotifyComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NotifyComponent],
-      providers: [NotificationService],
+      providers: [NotificationService, LoggerService],
     }).compileComponents();
   });
 

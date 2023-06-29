@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { Router } from '@angular/router';
+import { LoggerService } from 'src/app/shared/services/logger.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -21,7 +22,7 @@ describe('LoginComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
       ],
-      providers: [AuthService, NotificationService],
+      providers: [AuthService, NotificationService, LoggerService],
     }).compileComponents();
   });
 

@@ -9,6 +9,7 @@ import { NotificationService } from './notification.service';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { ResultCodeEnum } from '../enums/resultCode.enum';
+import { LoggerService } from 'src/app/shared/services/logger.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -20,6 +21,7 @@ describe('AuthService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
+        LoggerService,
         AuthService,
         {
           provide: NotificationService,

@@ -8,6 +8,7 @@ import { LoginRequestData, MeResponse } from 'src/app/core/models/auth.models';
 import { EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { LoggerService } from 'src/app/shared/services/logger.service';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private loggerService: LoggerService
   ) {}
   login(data: LoginRequestData) {
     this.http
@@ -35,8 +37,16 @@ export class AuthService {
         if (res.resultCode === ResultCodeEnum.success) {
           this.isAuth = true;
           this.router.navigate(['/']);
+          this.loggerService.info(
+            'Successful login, route to "/"',
+            'AuthService'
+          );
         } else {
           this.notificationService.handleError(res.messages[0]);
+          this.loggerService.error(
+            `Showed the error: ${res.messages[0]}`,
+            'AuthService'
+          );
         }
       });
   }
@@ -47,6 +57,15 @@ export class AuthService {
       .subscribe((res) => {
         if (res.resultCode === ResultCodeEnum.success) {
           this.router.navigate(['/login']);
+          this.loggerService.info(
+            'Successful logout, route to "/login"',
+            'AuthService'
+          );
+        } else {
+          this.loggerService.error(
+            'Logout error, something went wrong...',
+            'AuthService'
+          );
         }
       });
   }
@@ -58,6 +77,9 @@ export class AuthService {
       .subscribe((res) => {
         if (res.resultCode === ResultCodeEnum.success) {
           this.isAuth = true;
+          this.loggerService.info('User is authorized', 'AuthService');
+        } else {
+          this.loggerService.warn('User is not authorized', 'AuthService');
         }
         this.resolveAuthRequest();
       });
