@@ -4,51 +4,54 @@ import { Notify } from '../models/notify.models';
 
 describe('NotificationService', () => {
   let notificationService: NotificationService;
+  let message: string;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [NotificationService],
     });
+
     notificationService = TestBed.inject(NotificationService);
+    message = 'Error message';
   });
 
   it('should be created', () => {
     expect(notificationService).toBeTruthy();
   });
 
-  it('method handleError should emit a success notification', () => {
-    const successMessage = 'Action completed successfully';
-
-    notificationService.handleSuccess(successMessage);
-
-    notificationService.notify$.subscribe((notification: Notify | null) => {
-      expect(notification).toBeTruthy();
-      expect(notification!.severity).toBe('success');
-      expect(notification!.message).toBe(successMessage);
+  it('should initialize notify$ as null', () => {
+    notificationService.notify$.subscribe((value) => {
+      expect(value).toBeNull();
     });
   });
 
-  it('method handleSuccess should emit a success notification', () => {
-    const successMessage = 'Action completed successfully';
+  it('should emit error notification', () => {
+    const expectedNotify: Notify = { severity: 'error', message };
 
-    notificationService.handleSuccess(successMessage);
+    notificationService.handleError(message);
 
-    notificationService.notify$.subscribe((notification: Notify | null) => {
-      expect(notification).toBeTruthy();
-      expect(notification!.severity).toBe('success');
-      expect(notification!.message).toBe(successMessage);
+    notificationService.notify$.subscribe((value) => {
+      expect(value).toEqual(expectedNotify);
     });
   });
 
-  it('method clear should clear the notification', () => {
-    const errorMessage = 'An error occurred';
+  it('should emit success notification', () => {
+    const message = 'Success message';
+    const expectedNotify: Notify = { severity: 'success', message };
 
-    notificationService.handleError(errorMessage);
+    notificationService.handleSuccess(message);
 
+    notificationService.notify$.subscribe((value) => {
+      expect(value).toEqual(expectedNotify);
+    });
+  });
+
+  it('should clear the notification', () => {
+    notificationService.handleError(message);
     notificationService.clear();
 
-    notificationService.notify$.subscribe((notification: Notify | null) => {
-      expect(notification).toBeNull();
+    notificationService.notify$.subscribe((value) => {
+      expect(value).toBeNull();
     });
   });
 });
